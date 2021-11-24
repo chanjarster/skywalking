@@ -7,6 +7,8 @@ Release Notes.
 
 #### OAP Server
 
+* Add `SW_STORAGE_ES_SKIP_HOST_VERIFY` for ElasticSearch storage.
+
 #### UI
 
 #### Documentation

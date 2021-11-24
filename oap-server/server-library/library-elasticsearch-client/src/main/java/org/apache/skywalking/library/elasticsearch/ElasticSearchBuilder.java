@@ -61,6 +61,8 @@ public final class ElasticSearchBuilder {
 
     private String trustStorePass;
 
+    private boolean skipHostVerify;
+
     private Duration connectTimeout = Duration.ofMillis(500);
 
     private Duration socketTimeout = Duration.ofSeconds(30);
@@ -136,6 +138,11 @@ public final class ElasticSearchBuilder {
         return this;
     }
 
+    public ElasticSearchBuilder skipHostVerify(boolean skipHostVerify) {
+        this.skipHostVerify = skipHostVerify;
+        return this;
+    }
+
     @SneakyThrows
     public ElasticSearch build() {
         final List<Endpoint> endpoints =
@@ -149,6 +156,10 @@ public final class ElasticSearchBuilder {
                          .idleTimeout(socketTimeout)
                          .useHttp2Preface(false)
                          .workerGroup(numHttpClientThread > 0 ? numHttpClientThread : NUM_PROC);
+
+        if (skipHostVerify) {
+            factoryBuilder.tlsNoVerify();
+        }
 
         if (StringUtil.isNotBlank(trustStorePath)) {
             final TrustManagerFactory trustManagerFactory =
